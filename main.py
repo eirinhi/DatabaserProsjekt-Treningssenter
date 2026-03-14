@@ -1,4 +1,4 @@
-import brukstilfelle1, brukstilfelle2
+import brukstilfelle1, brukstilfelle2, brukstilfelle3
 import sqlite3
 import os
 
@@ -31,8 +31,26 @@ def main():
 
             brukstilfelle2.book_gruppetime(epost, aktivitet, tidspunkt)
 
+
         elif valg == "3":
-            print("\n[Logikk for BT 3 kommer her]")
+            print("\nRegistrering av oppmøte: ")
+            epost = input("E-post (trykk Enter for johnny@stud.ntnu.no): ") or "johnny@stud.ntnu.no"
+
+            bookinger = brukstilfelle3.hent_dagens_bookinger(epost)
+            if not bookinger:
+                print(f"Ingen bookinger funnet for {epost} i dag.")
+            else:
+                print(f"\nVelg hvilken booking du vil registrere oppmøte for: ")
+                # skriver ut alle dagens bookinger for brukeren
+                for i, (senter, sal, tid, aktivitet) in enumerate(bookinger):
+                    print(f"{i+1}. {aktivitet} kl. {tid} ({senter})")
+                
+                valg = int(input(f"Velg booking: "))
+                valgt_trening = bookinger[valg - 1]
+
+                brukstilfelle3.registrer_oppmøte(epost, valgt_trening)
+
+
         elif valg == "4":
             print("\n[Logikk for BT 4 kommer her]")
         elif valg == "5":

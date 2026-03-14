@@ -399,3 +399,20 @@ BEGIN
         THEN RAISE(ABORT, 'Lagtreningen er fullbooket (salens kapasitet er nådd).')
     END;
 END;
+
+
+-- Trigger som hindrer registrering av en gruppetime for tidlig
+CREATE TRIGGER sjekk_tidlig_oppmøte
+BEFORE UPDATE OF status ON booking
+FOR EACH ROW
+WHEN NEW.status = 'Møtt' AND OLD.status = 'Booket'
+BEGIN
+    SELECT CASE
+        -- Den kommenterte linjen er den riktige løsningen for triggeren, men vi har valgt å endre
+        -- sjekken av tid til en simulert tid for å sikre at programmet er etterprøvbart
+        -- for de gitte brukstilfellene og kravene til treningsøkter mellom 16. og 18. mars
+        -- WHEN datetime('now') < datetime(NEW.start_tid, '-90 minutes')
+        WHEN (SELECT simulert_nåtid FROM system_tid) < datetime(NEW.start_tid, '-90 minutes')
+        THEN RAISE(ABORT, 'Det er for tidlig å registrere oppmøte. Registrering kan skje tidligst 90 minutter før start.')
+    END;
+END;

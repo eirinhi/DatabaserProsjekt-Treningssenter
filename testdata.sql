@@ -4,7 +4,7 @@
 
 -- Setter en simulert nåtid for å sikre at programmet er etterprøvbart
 INSERT INTO system_tid (simulert_nåtid)
-VALUES ('2026-03-16 08:00:00');
+VALUES ('2026-03-17 17:30:00');
 
 -- Legger til treningssentrene
 INSERT INTO treningssenter (navn, gateadresse, åpningstid, stengningstid)
