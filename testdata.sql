@@ -244,6 +244,12 @@ VALUES
     ('NTNUI Basketball', 'Basket');
 
 
+-- Legger til noen lagtreninger
+INSERT INTO lagtrening (idrettslag_navn, gruppe_navn, start_tid, slutt_tid, senter_navn, sal_navn)
+VALUES
+    ('NTNUI Håndball', 'H1 - 2.divisjon', '2026-03-17 18:30:00', '2026-03-17 19:30:00', 'Dragvoll idrettssenter', 'Hall B'),
+    ('NTNUI Basketball', 'Basket', '2026-03-17 19:45:00', '2026-03-17 20:45:00', 'Dragvoll idrettssenter', 'Gymsal');
+
 -- Booking av trening «Spin60» på tirsdag 17. mars kl. 18.30 på Øya treningssenter
 -- for bruker «johnny@stud.ntnu.no». Denne skal leveres som både Python og SQL.
 -- La brukernavn, aktivitet og tidspunkt være parametere, og sjekk at treningen

@@ -1,4 +1,4 @@
-import brukstilfelle1, brukstilfelle2, brukstilfelle3
+import brukstilfelle1, brukstilfelle2, brukstilfelle3, brukstilfelle4
 import sqlite3
 import os
 
@@ -52,7 +52,11 @@ def main():
 
 
         elif valg == "4":
-            print("\n[Logikk for BT 4 kommer her]")
+            uke = int(input("Skriv inn ukenummer (1-52, trykk Enter for 12): ") or 12)
+            start_dag = brukstilfelle4.finn_startdag_i_uke(uke)
+            brukstilfelle4.hent_ukeplan(start_dag, uke)
+
+
         elif valg == "5":
             print("\n[Logikk for BT 5 kommer her]")
         elif valg == "6":
