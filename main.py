@@ -1,4 +1,4 @@
-import brukstilfelle1
+import brukstilfelle1, brukstilfelle2
 import sqlite3
 import os
 
@@ -24,7 +24,13 @@ def main():
         valg = input("Velg et brukstilfelle (0-8): ")
 
         if valg == "2":
-            print("\n[Logikk for BT 2 kommer her]")
+            print("\nBooking av trening: ")
+            epost = input("E-post (trykk Enter for johnny@stud.ntnu.no): ") or "johnny@stud.ntnu.no"
+            aktivitet = input("Aktivitet (trykk Enter for Spin60): ") or "Spin60"
+            tidspunkt = input("Starttid (YYYY-MM-DD HH:MM:SS, trykk Enter for 2026-03-17 18:30:00): ") or "2026-03-17 18:30:00"
+
+            brukstilfelle2.book_gruppetime(epost, aktivitet, tidspunkt)
+
         elif valg == "3":
             print("\n[Logikk for BT 3 kommer her]")
         elif valg == "4":
