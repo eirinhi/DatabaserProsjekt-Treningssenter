@@ -280,7 +280,11 @@ BEFORE INSERT ON booking
 FOR EACH ROW
 BEGIN
     SELECT CASE
-        WHEN datetime('now', 'localtime') > datetime(NEW.start_tid, '-5 minutes')
+        WHEN NEW.status = 'Booket'
+            -- Den kommenterte linjen under er den riktige løsningen, men vi velger å bruke
+            -- systemtid i prosjektet for å sikre etterprøvbarhet
+            -- AND datetime('now', 'localtime') > datetime(NEW.start_tid, '-5 minutes')
+            AND (SELECT simulert_nåtid FROM system_tid) > datetime(NEW.start_tid, '-5 minutes')
         THEN RAISE(ABORT, 'Det er for sent å melde seg på denne timen.')
     END;
 END;

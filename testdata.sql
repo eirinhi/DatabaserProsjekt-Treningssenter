@@ -221,6 +221,7 @@ VALUES
     ('Øya treningssenter', 'Sykkelsal', '2026-03-18 18:30:00', '2026-03-18 19:15:00', 'Spin45', 21),
     ('Øya treningssenter', 'Sykkelsal', '2026-03-18 19:30:00', '2026-03-18 20:25:00', 'Spin 8x3', 22);
 
+
 -- Legger til noen idrettslag
 INSERT INTO idrettslag (navn)
 VALUES
@@ -236,6 +237,7 @@ VALUES
     (4, 'NTNUI Basketball'),
     (5, 'NTNUI Basketball');
 
+
 -- Legger til noen idrettslag-grupper
 INSERT INTO idrettslag_gruppe (idrettslag_navn, gruppe_navn)
 VALUES
@@ -250,9 +252,36 @@ VALUES
     ('NTNUI Håndball', 'H1 - 2.divisjon', '2026-03-17 18:30:00', '2026-03-17 19:30:00', 'Dragvoll idrettssenter', 'Hall B'),
     ('NTNUI Basketball', 'Basket', '2026-03-17 19:45:00', '2026-03-17 20:45:00', 'Dragvoll idrettssenter', 'Gymsal');
 
--- Booking av trening «Spin60» på tirsdag 17. mars kl. 18.30 på Øya treningssenter
--- for bruker «johnny@stud.ntnu.no». Denne skal leveres som både Python og SQL.
--- La brukernavn, aktivitet og tidspunkt være parametere, og sjekk at treningen
--- finnes før dere booker.
--- INSERT INTO booking (senter_navn, sal_navn, start_tid, brukerID)
--- VALUES ('Øya treningssenter', 'Sykkelsal', '2026-03-17 18:30:00', 10);
+
+-- Legger til noen gruppetimer og lagtreninger til personlig besøkshistorikk (brukstilfelle 5)
+INSERT INTO gruppetime (senter_navn, sal_navn, start_tid, slutt_tid, aktivitet_navn, instruktørID)
+VALUES
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-01-10 07:00:00', '2026-01-10 07:45:00', 'Spin 4x4', 11),
+    ('Øya treningssenter', 'Sykkelsal', '2026-01-18 10:00:00', '2026-01-18 10:45:00', 'Spin45', 12),
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-01-30 18:00:00', '2026-01-30 18:45:00', 'Spin 8x3', 13),
+    ('Øya treningssenter', 'Sykkelsal', '2026-02-10 07:00:00', '2026-02-10 07:45:00', 'Spin60', 14),
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-02-20 20:00:00', '2026-02-20 20:45:00', 'Spin 4x4', 15),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-10 17:00:00', '2026-03-10 17:45:00', 'Spin45', 16);
+
+INSERT INTO booking (senter_navn, sal_navn, start_tid, brukerID, status)
+VALUES
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-01-10 07:00:00', 10, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-01-18 10:00:00', 10, 'Møtt'),
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-01-30 18:00:00', 10, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-02-10 07:00:00', 10, 'Møtt'),
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-02-20 20:00:00', 10, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-10 17:00:00', 10, 'Møtt');
+
+INSERT INTO medlem_av_idrettslag (brukerID, idrettslag_navn)
+VALUES
+    (10, 'NTNUI Håndball');
+
+INSERT INTO lagtrening (idrettslag_navn, gruppe_navn, start_tid, slutt_tid, senter_navn, sal_navn)
+VALUES
+    ('NTNUI Håndball', 'H1 - 2.divisjon', '2026-01-14 18:30:00', '2026-01-14 19:30:00', 'Dragvoll idrettssenter', 'Hall B'),
+    ('NTNUI Håndball', 'H1 - 2.divisjon', '2026-02-08 19:45:00', '2026-02-08 20:45:00', 'Dragvoll idrettssenter', 'Gymsal');
+
+INSERT INTO deltar_på_lagtrening (brukerID, idrettslag_navn, gruppe_navn, start_tid)
+VALUES
+    (10, 'NTNUI Håndball', 'H1 - 2.divisjon', '2026-01-14 18:30:00'),
+    (10, 'NTNUI Håndball', 'H1 - 2.divisjon', '2026-02-08 19:45:00');

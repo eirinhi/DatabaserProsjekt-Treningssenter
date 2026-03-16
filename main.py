@@ -1,4 +1,4 @@
-import brukstilfelle1, brukstilfelle2, brukstilfelle3, brukstilfelle4
+import brukstilfelle1, brukstilfelle2, brukstilfelle3, brukstilfelle4, brukstilfelle5
 import sqlite3
 import os
 
@@ -7,7 +7,7 @@ def vis_meny():
     print("Brukstilfeller: ")
     print("2. Booking av gruppetime ")
     print("3. Registrering av oppmøte ")
-    print("4. Ukeplan for alle treninger registrrert i uke 12 ")
+    print("4. Ukeplan for alle treninger registrert i uke 12 ")
     print("5. Personlig besøkshistorie ")
     print("6. Svartelisting ")
     print("7. Flest treninger ")
@@ -40,13 +40,15 @@ def main():
             if not bookinger:
                 print(f"Ingen bookinger funnet for {epost} i dag.")
             else:
-                print(f"\nVelg hvilken booking du vil registrere oppmøte for: ")
-                # skriver ut alle dagens bookinger for brukeren
-                for i, (senter, sal, tid, aktivitet) in enumerate(bookinger):
-                    print(f"{i+1}. {aktivitet} kl. {tid} ({senter})")
-                
-                valg = int(input(f"Velg booking: "))
-                valgt_trening = bookinger[valg - 1]
+                if len(bookinger) == 1:
+                    valgt_trening = bookinger[0]
+                else:
+                    print(f"\nVelg hvilken booking du vil registrere oppmøte for: ")
+                    for i, (senter, sal, tid, aktivitet) in enumerate(bookinger):
+                        print(f"{i+1}. {aktivitet} kl. {tid} ({senter})")
+                    
+                    valg = int(input(f"Velg booking: "))
+                    valgt_trening = bookinger[valg - 1]
 
                 brukstilfelle3.registrer_oppmøte(epost, valgt_trening)
 
@@ -58,7 +60,10 @@ def main():
 
 
         elif valg == "5":
-            print("\n[Logikk for BT 5 kommer her]")
+            epost = input("E-post (trykk Enter for johnny@stud.ntnu.no): ") or "johnny@stud.ntnu.no"
+            brukstilfelle5.personlig_besøkshistorikk(epost)
+
+
         elif valg == "6":
             print("\n[Logikk for BT 6 kommer her]")
         elif valg == "7":
