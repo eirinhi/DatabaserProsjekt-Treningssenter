@@ -62,7 +62,10 @@ BEGIN
             SELECT COUNT(*)
             FROM prikk
             WHERE brukerID = NEW.brukerID
-                AND dato_og_tid >= datetime('now', '-30 days')
+                -- Den kommenterte linjen under er den riktige løsningen for triggeren,
+                -- men vi velger å bruke den simulerte systemtiden for å sikre at programmet er etterprøvbart
+                -- AND dato_og_tid >= datetime('now', '-30 days')
+                AND dato_og_tid >= datetime((SELECT simulert_nåtid FROM system_tid), '-30 days')
         ) >= 3
         THEN RAISE(ABORT, 'Brukeren er svartelistet på grunn av 3 eller flere prikker de siste 30 dagene.')
     END;

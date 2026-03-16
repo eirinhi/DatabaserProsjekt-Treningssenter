@@ -219,7 +219,8 @@ VALUES
     ('Dragvoll idrettssenter', 'Spinningsal', '2026-03-18 16:30:00', '2026-03-18 17:15:00', 'Spin45', 19),
     ('Øya treningssenter', 'Sykkelsal', '2026-03-18 17:30:00', '2026-03-18 18:15:00', 'Spin 4x4', 20),
     ('Øya treningssenter', 'Sykkelsal', '2026-03-18 18:30:00', '2026-03-18 19:15:00', 'Spin45', 21),
-    ('Øya treningssenter', 'Sykkelsal', '2026-03-18 19:30:00', '2026-03-18 20:25:00', 'Spin 8x3', 22);
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-18 19:30:00', '2026-03-18 20:25:00', 'Spin 8x3', 22),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-18 20:30:00', '2026-03-18 21:25:00', 'Spin 8x3', 22);
 
 
 -- Legger til noen idrettslag

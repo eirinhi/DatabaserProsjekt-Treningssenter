@@ -1,4 +1,4 @@
-import brukstilfelle1, brukstilfelle2, brukstilfelle3, brukstilfelle4, brukstilfelle5
+import brukstilfelle1, brukstilfelle2, brukstilfelle3, brukstilfelle4, brukstilfelle5, brukstilfelle6
 import sqlite3
 import os
 
@@ -65,7 +65,9 @@ def main():
 
 
         elif valg == "6":
-            print("\n[Logikk for BT 6 kommer her]")
+            epost = input("E-post (trykk Enter for johnny@stud.ntnu.no): ") or "johnny@stud.ntnu.no"
+            brukstilfelle6.simuler_svartelisting(epost)
+
         elif valg == "7":
             print("\n[Logikk for BT 7 kommer her]")
         elif valg == "8":
