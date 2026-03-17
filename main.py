@@ -1,4 +1,4 @@
-import brukstilfelle1, brukstilfelle2, brukstilfelle3, brukstilfelle4, brukstilfelle5, brukstilfelle6
+import brukstilfelle1, brukstilfelle2, brukstilfelle3, brukstilfelle4, brukstilfelle5, brukstilfelle6, brukstilfelle7
 import sqlite3
 import os
 
@@ -65,11 +65,15 @@ def main():
 
 
         elif valg == "6":
-            epost = input("E-post (trykk Enter for johnny@stud.ntnu.no): ") or "johnny@stud.ntnu.no"
+            print("\nSimulering av svartelisting: ")
+            epost = input("Oppgi E-post for en bruker (trykk Enter for johnny@stud.ntnu.no): ") or "johnny@stud.ntnu.no"
             brukstilfelle6.simuler_svartelisting(epost)
 
         elif valg == "7":
-            print("\n[Logikk for BT 7 kommer her]")
+            print("\nFinn månedens medlem: ")
+            måned = input("Oppgi en måned (1-12, trykk Enter for 3): ") or 3
+            brukstilfelle7.finn_månedens_medlem(måned)
+
         elif valg == "8":
             print("\n[Logikk for BT 8 kommer her]")
         elif valg == "0":

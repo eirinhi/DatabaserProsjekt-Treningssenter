@@ -286,3 +286,32 @@ INSERT INTO deltar_på_lagtrening (brukerID, idrettslag_navn, gruppe_navn, start
 VALUES
     (10, 'NTNUI Håndball', 'H1 - 2.divisjon', '2026-01-14 18:30:00'),
     (10, 'NTNUI Håndball', 'H1 - 2.divisjon', '2026-02-08 19:45:00');
+
+
+-- Legger til noen bookinger for brukere som har trent sammen (felles treninger) for brukstilfelle 7 og 8
+INSERT INTO booking (senter_navn, sal_navn, start_tid, brukerID, status)
+VALUES
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 07:00:00', 1, 'Møtt'),
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-03-16 16:30:00', 1, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 17:40:00', 1, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 19:00:00', 1, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 07:00:00', 1, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 18:30:00', 1, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 19:45:00', 1, 'Møtt'),
+
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 07:00:00', 2, 'Møtt'),
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-03-16 16:30:00', 2, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 17:40:00', 2, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 19:00:00', 2, 'Møtt'),
+
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 17:40:00', 3, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 19:00:00', 3, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 07:00:00', 3, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 18:30:00', 3, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 19:45:00', 3, 'Møtt'),
+
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 07:00:00', 4, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 16:30:00', 4, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 19:00:00', 4, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 18:30:00', 4, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 19:45:00', 4, 'Møtt');

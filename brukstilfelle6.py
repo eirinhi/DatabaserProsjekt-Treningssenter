@@ -1,6 +1,10 @@
 import sqlite3
 
 def simuler_svartelisting(epost):
+    con = None
+    cur = None
+    brukerID = None
+
     try:
         print(f"\nSTARTER SIMULERING AV SVARTELISTING FOR {epost}...")
 
@@ -15,7 +19,7 @@ def simuler_svartelisting(epost):
         """, (epost,))
         bruker = cur.fetchone()
         if not bruker:
-            print(f"Fant ingen bruker med e-post {epost}.")
+            print(f"Feil: Fant ingen bruker med e-post {epost}.")
             return
         brukerID = bruker[0]
 
@@ -59,11 +63,13 @@ def simuler_svartelisting(epost):
         print(f"\nFeil under simulering av svartelisting [{e}]")
 
     finally:
-        if con:
+        if con and cur and brukerID is not None:
             cur.execute("""
                         DELETE FROM prikk
                         WHERE brukerID = ?
             """, (brukerID, ))
             con.commit()
             print(f"\nOppryddning: 'Test-prikkene' for {epost} er slettet. ")
+
+        if con:
             con.close()
