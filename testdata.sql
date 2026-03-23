@@ -1,6 +1,5 @@
--- Brukstilfelle 1:
--- 'Legg inn treningssenter, saler, noen sykler, noen brukere,
--- noen trenere og treninger som nevnt over.'
+-- ====================================================================================
+-- ============================== BRUKSTILFELLE 1 =====================================
 
 -- Setter en simulert nåtid for å sikre at programmet er etterprøvbart
 INSERT INTO system_tid (simulert_nåtid)
@@ -230,6 +229,7 @@ VALUES
     ('NTNUI Basketball');
 
 
+-- Legger til noen medlemmer i idrettslag
 INSERT INTO medlem_av_idrettslag (brukerID, idrettslag_navn)
 VALUES
     (1, 'NTNUI Håndball'),
@@ -255,6 +255,7 @@ VALUES
 
 
 -- Legger til noen gruppetimer og lagtreninger til personlig besøkshistorikk (brukstilfelle 5)
+------------------------------------------------------------------------------------------------------------
 INSERT INTO gruppetime (senter_navn, sal_navn, start_tid, slutt_tid, aktivitet_navn, instruktørID)
 VALUES
     ('Dragvoll idrettssenter', 'Spinningsal', '2026-01-10 07:00:00', '2026-01-10 07:45:00', 'Spin 4x4', 11),
@@ -289,6 +290,7 @@ VALUES
 
 
 -- Legger til noen bookinger for brukere som har trent sammen (felles treninger) for brukstilfelle 7 og 8
+---------------------------------------------------------------------------------------------------------
 INSERT INTO booking (senter_navn, sal_navn, start_tid, brukerID, status)
 VALUES
     ('Øya treningssenter', 'Sykkelsal', '2026-03-16 07:00:00', 1, 'Møtt'),
@@ -314,4 +316,14 @@ VALUES
     ('Øya treningssenter', 'Sykkelsal', '2026-03-16 16:30:00', 4, 'Møtt'),
     ('Øya treningssenter', 'Sykkelsal', '2026-03-16 19:00:00', 4, 'Møtt'),
     ('Øya treningssenter', 'Sykkelsal', '2026-03-17 18:30:00', 4, 'Møtt'),
-    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 19:45:00', 4, 'Møtt');
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 19:45:00', 4, 'Møtt'),
+
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 07:00:00', 5, 'Møtt'),
+    ('Dragvoll idrettssenter', 'Spinningsal', '2026-03-16 16:30:00', 5, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 17:40:00', 5, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-16 19:00:00', 5, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 07:00:00', 5, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 18:30:00', 5, 'Møtt'),
+    ('Øya treningssenter', 'Sykkelsal', '2026-03-17 19:45:00', 5, 'Møtt');
+
+-- ====================================================================================

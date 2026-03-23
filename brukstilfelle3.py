@@ -1,7 +1,12 @@
 import sqlite3
 
+# funksjon for å hente dagens bookinger for en bruker. Treningene er bare treninger
+# med status 'Booket' for å sørge for at de ikke allerede har registrert oppmøte,
+# og det er disse som brukes som parameter 'trening' i registrer_oppmøte(), altså
+# er treningene hentet gjennom denne funksjonen
 def hent_dagens_bookinger(epost):
     con = sqlite3.connect("trening.db")
+    con.execute("PRAGMA foreign_keys = ON;")
     cur = con.cursor()
 
     cur.execute("""
@@ -25,6 +30,9 @@ def hent_dagens_bookinger(epost):
     return treninger
 
 
+# ====================================================================================
+# ============================== BRUKSTILFELLE 3 =====================================
+# ========================== Registrering av oppmøte =================================
 def registrer_oppmøte(epost, trening):
     senter = trening[0]
     sal = trening[1]
@@ -36,6 +44,7 @@ def registrer_oppmøte(epost, trening):
         con.execute("PRAGMA foreign_keys = ON;")
         cur = con.cursor()
 
+        # oppdaterer status til 'Møtt' for riktig booking for å registrere oppmøte
         cur.execute("""
                     UPDATE booking
                     SET status = 'Møtt'
@@ -61,3 +70,4 @@ def registrer_oppmøte(epost, trening):
 
     finally:
         con.close()
+# ====================================================================================

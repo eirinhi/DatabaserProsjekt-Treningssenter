@@ -1,5 +1,12 @@
 import sqlite3
 
+# ====================================================================================
+# ============================== BRUKSTILFELLE 2 =====================================
+# ============================ Booking av gruppetime =================================
+
+# merk at vi bruker epost som parameter framfor brukernavn, siden epost er unikt innad
+# i systemet, og identifiserer en bruker, og siden vi har valgt å ikke ha et
+# brukernavn-felt i tabellen.
 def book_gruppetime(epost, aktivitet, tidspunkt):
     try:
         con = sqlite3.connect("trening.db")
@@ -23,10 +30,13 @@ def book_gruppetime(epost, aktivitet, tidspunkt):
         """, (aktivitet, tidspunkt))
         mulige_gruppetimer = cur.fetchall()
 
+        # skriver ut en feilmelding hvis ingen gruppetimer ble funnet, og returnerer
         if not mulige_gruppetimer:
             print(f"Feil: Gruppetimen '{aktivitet}' kl. {tidspunkt} ble ikke funnet.")
             return
         
+        # hvis det bare finnes én gruppetime, velger vi den automatisk, ellers ber vi
+        # brukeren om å velge hvilken gruppetime de ønsker å booke
         if len(mulige_gruppetimer) == 1:
             senter, sal_navn = mulige_gruppetimer[0]
         else:
@@ -52,3 +62,4 @@ def book_gruppetime(epost, aktivitet, tidspunkt):
 
     finally:
         con.close()
+# ====================================================================================

@@ -1,3 +1,40 @@
+-- ====================================================================================
+-- ============================== TRIGGERE ============================================
+
+-- Triggerne er implementert på bakgrunn av vurderinger i DB1 rundt hvilke restriksjoner
+-- som må håndteres i applikasjonen for å sikre dataintegritet og forretningslogikk
+
+-- Noen av triggerne er implementert kun på bakgrunn av vurderingene i DB1, mens noen er
+-- nødvendige for å oppfylle kravene i brukstilfellene i DB2
+---------------------------------------------------------------------------------------
+
+
+
+-- Nødvendige triggere for å oppfylle kravene i brukstilfellene i DB2:
+-- ====================================================================================
+-- Brukstilfelle 6:
+-- Trigger for å sjekke svartelisting før booking
+CREATE TRIGGER sjekk_svartelisting
+BEFORE INSERT ON booking
+FOR EACH ROW
+BEGIN
+    SELECT CASE
+        WHEN (
+            SELECT COUNT(*)
+            FROM prikk
+            WHERE brukerID = NEW.brukerID
+                -- Bruker simulert systemtid for etterprøvbarhet.
+                -- AND dato_og_tid >= datetime('now', '-30 days')
+                AND dato_og_tid >= datetime((SELECT simulert_nåtid FROM system_tid), '-30 days')
+        ) >= 3
+        THEN RAISE(ABORT, 'Brukeren er svartelistet på grunn av 3 eller flere prikker de siste 30 dagene.')
+    END;
+END;
+
+
+
+-- Triggere implementert på bakgrunn av vurderinger i DB1:
+-- ====================================================================================
 -- Trigger for å sette kø_posisjon basert på antall påmeldinger og salens kapasitet
 CREATE TRIGGER sett_kø_posisjon
 AFTER INSERT ON booking
@@ -28,7 +65,6 @@ BEGIN
 END;
 
 
-
 -- Trigger for å oppdatere kø_posisjon for alle påmeldte når noen melder seg av en gruppetime
 CREATE TRIGGER oppdater_kø_posisjon_ved_avmelding
 AFTER UPDATE OF status ON booking
@@ -51,28 +87,6 @@ BEGIN
 END;
 
 
-
--- Trigger for å sjekke svartelisting før booking
-CREATE TRIGGER sjekk_svartelisting
-BEFORE INSERT ON booking
-FOR EACH ROW
-BEGIN
-    SELECT CASE
-        WHEN (
-            SELECT COUNT(*)
-            FROM prikk
-            WHERE brukerID = NEW.brukerID
-                -- Den kommenterte linjen under er den riktige løsningen for triggeren,
-                -- men vi velger å bruke den simulerte systemtiden for å sikre at programmet er etterprøvbart
-                -- AND dato_og_tid >= datetime('now', '-30 days')
-                AND dato_og_tid >= datetime((SELECT simulert_nåtid FROM system_tid), '-30 days')
-        ) >= 3
-        THEN RAISE(ABORT, 'Brukeren er svartelistet på grunn av 3 eller flere prikker de siste 30 dagene.')
-    END;
-END;
-
-
-
 -- Trigger for å opprette prikk ved status 'Ikke møtt'
 CREATE TRIGGER opprett_prikk_ikke_møtt
 AFTER UPDATE OF status ON booking
@@ -82,7 +96,6 @@ BEGIN
     INSERT INTO prikk (brukerID, dato_og_tid)
     VALUES (NEW.brukerID, NEW.start_tid);
 END;
-
 
 
 -- Triggere som hindrer at en bruker kan være registrert to steder samtidig
@@ -161,7 +174,6 @@ BEGIN
 END;
 
 
-
 -- Triggere for å sikre at en instruktør ikke kan finnes flere steder på en gang:
 ---------------------------------------------------------------------------------
 -- Trigger for å hindre instruktør fra å booke en gruppetime når hen er
@@ -230,51 +242,18 @@ BEGIN
     END;
 END;
 
-
-
--- Trigger for å sørge for at en bruker ikke kan booke en gruppetime dersom brukeren
--- allerede har booket en gruppetime med overlappende tilspunkt
-CREATE TRIGGER sjekk_bruker_overlapp_gruppetimer
-BEFORE INSERT ON booking
-FOR EACH ROW
-BEGIN
-    SELECT CASE
-        WHEN EXISTS (
-            SELECT 1 FROM booking b
-            JOIN gruppetime g_eksisterende 
-                ON b.senter_navn = g_eksisterende.senter_navn 
-                AND b.sal_navn = g_eksisterende.sal_navn 
-                AND b.start_tid = g_eksisterende.start_tid
-            JOIN gruppetime g_ny 
-                ON g_ny.senter_navn = NEW.senter_navn 
-                AND g_ny.sal_navn = NEW.sal_navn 
-                AND g_ny.start_tid = NEW.start_tid
-            WHERE b.brukerID = NEW.brukerID
-                AND b.status != 'Avmeldt'
-                AND g_ny.start_tid < g_eksisterende.slutt_tid
-                AND g_eksisterende.start_tid < g_ny.slutt_tid
-        )
-        THEN RAISE(ABORT, 'Brukeren har allerede booket denne eller en annen gruppetime i dette tidsrommet.')
-    END;
-END;
-
-
-
 -- Trigger som sørger for at man ikke kan booke en gruppetime tidligere enn 48 timer før den starter
 CREATE TRIGGER sjekk_booking_48_timer
 BEFORE INSERT ON booking
 FOR EACH ROW
 BEGIN
     SELECT CASE
-        -- Den kommenterte linjen er den riktige løsningen for triggeren, men vi har valgt å endre
-        -- sjekken av tid til en simulert tid for å sikre at programmet er etterprøvbart
-        -- for de gitte brukstilfellene og kravene til treningsøkter mellom 16. og 18. mars
+        -- Bruker simulert systemtid for etterprøvbarhet i testscenariene.
         -- WHEN datetime('now') < datetime(NEW.start_tid, '-48 hours')
         WHEN (SELECT simulert_nåtid FROM system_tid) < datetime(NEW.start_tid, '-48 hours')
         THEN RAISE(ABORT, 'Det er ikke mulig å booke denne timen ennå. Booking åpner 48 timer før start.')
     END;
 END;
-
 
 
 -- Trigger som hindrer booking av en gruppetime etter at oppmøte-fristen har gått ut
@@ -284,14 +263,12 @@ FOR EACH ROW
 BEGIN
     SELECT CASE
         WHEN NEW.status = 'Booket'
-            -- Den kommenterte linjen under er den riktige løsningen, men vi velger å bruke
-            -- systemtid i prosjektet for å sikre etterprøvbarhet
+            -- Bruker simulert systemtid for etterprøvbarhet.
             -- AND datetime('now', 'localtime') > datetime(NEW.start_tid, '-5 minutes')
             AND (SELECT simulert_nåtid FROM system_tid) > datetime(NEW.start_tid, '-5 minutes')
         THEN RAISE(ABORT, 'Det er for sent å melde seg på denne timen.')
     END;
 END;
-
 
 
 -- Triggere som sørger for at en sal ikke dobbeltbookes:
@@ -348,6 +325,17 @@ END;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 -- Trigger som sørger for at en bruker er medlem av laget til gruppen som holder en lagtrening
 CREATE TRIGGER sjekk_medlemskap_idrettslag
 BEFORE INSERT ON deltar_på_lagtrening
@@ -365,13 +353,14 @@ BEGIN
 END;
 
 
-
 -- Trigger som endrer status på en booking til 'Ikke møtt' ved for sen avmelding
 CREATE TRIGGER sjekk_sen_avmelding
 AFTER UPDATE OF status ON booking
 FOR EACH ROW
 WHEN NEW.status = 'Avmeldt'
-AND datetime('now') > datetime(OLD.start_tid, '-1 hour')
+-- Bruker simulert systemtid for etterprøvbarhet.
+-- AND datetime('now') > datetime(OLD.start_tid, '-1 hour')
+AND datetime((SELECT simulert_nåtid FROM system_tid)) > datetime(OLD.start_tid, '-1 hour')
 BEGIN
     UPDATE booking 
     SET status = 'Ikke møtt'
@@ -380,7 +369,6 @@ BEGIN
         AND senter_navn = NEW.senter_navn
         AND sal_navn = NEW.sal_navn;
 END;
-
 
 
 -- Trigger som hindrer flere brukere enn salen har kapasitet til i å delta på en lagtrening
@@ -415,9 +403,7 @@ FOR EACH ROW
 WHEN NEW.status = 'Møtt' AND OLD.status = 'Booket'
 BEGIN
     SELECT CASE
-        -- Den kommenterte linjen er den riktige løsningen for triggeren, men vi har valgt å endre
-        -- sjekken av tid til en simulert tid for å sikre at programmet er etterprøvbart
-        -- for de gitte brukstilfellene og kravene til treningsøkter mellom 16. og 18. mars
+        -- Bruker simulert systemtid for etterprøvbarhet i testscenariene.
         -- WHEN datetime('now') < datetime(NEW.start_tid, '-90 minutes')
         WHEN (SELECT simulert_nåtid FROM system_tid) < datetime(NEW.start_tid, '-90 minutes')
         THEN RAISE(ABORT, 'Det er for tidlig å registrere oppmøte. Registrering kan skje tidligst 90 minutter før start.')

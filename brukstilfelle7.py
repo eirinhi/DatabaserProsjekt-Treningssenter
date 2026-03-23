@@ -1,8 +1,12 @@
 import sqlite3
 
+# ====================================================================================
+# ============================== BRUKSTILFELLE 7 =====================================
+# ========================== Månedens medlem(mer) =======================================
 def finn_månedens_medlem(måned):
     try:
         con = sqlite3.connect("trening.db")
+        con.execute("PRAGMA foreign_keys = ON;")
         cur = con.cursor()
 
         år = "2026"
@@ -18,6 +22,8 @@ def finn_månedens_medlem(måned):
 
         mnd = f"{måned_tall:02d}"
 
+        # henter alle brukere som har møtt opp på treninger i den gitte måneden, og teller antall treninger
+        # for hver bruker, for å finne ut hvem som har flest registrerte oppmøter i den måneden
         cur.execute("""
                     WITH treninger AS (
                         SELECT u.fornavn, u.etternavn, u.epost, COUNT(*) as antall
@@ -40,11 +46,15 @@ def finn_månedens_medlem(måned):
             return
         
         print(f"\nMÅNEDENS MEDLEM(MER) FOR MÅNED {mnd}. I {år}: ")
-        for rad in vinnere:
-            print(f"{rad[0]} {rad[1]} ({rad[2]}) - Antall økter: {rad[3]}")
+        print("----------------------------------------------------------------------------")
+        print("Fornavn         | Etternavn       | E-post               | Antall økter")
+        print("----------------------------------------------------------------------------")
+        for fornavn, etternavn, epost, antall in vinnere:
+            print(f"{fornavn:<15} | {etternavn:<15} | {epost:<20} |      {antall}")
 
     except sqlite3.Error as e:
         print(f"\nFeil under henting av månedens medlem(er) [{e}]")
 
     finally:
         con.close()
+# ====================================================================================

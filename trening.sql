@@ -26,6 +26,10 @@ DROP TABLE IF EXISTS system_tid;
 PRAGMA foreign_keys = ON;
 
 -- Oppretter simulering av tid (for testdata)
+------------------------------------------------------------------------------------
+-- Denne tabellen er et resultat av å simulere tid for at programmet skal være
+-- etterprøvbart for sensor, og løsningen er valgt i SQL fordi oppgaven spesifiserer
+-- at SQL favoriseres over Python.
 CREATE TABLE system_tid (
     simulert_nåtid DATETIME NOT NULL
 );

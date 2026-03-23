@@ -1,10 +1,13 @@
 import sqlite3
 
+# Funksjon som utfører SQL-spørring for brukstilfelle 5
 def personlig_besøkshistorikk(epost):
     try:
         con = sqlite3.connect("trening.db")
+        con.execute("PRAGMA foreign_keys = ON;")
         cur = con.cursor()
 
+        # henter brukerID for gitt e-post for å bruke i spørringen for personlig besøkshistorikk
         cur.execute("""
                     SELECT brukerID
                     FROM bruker
@@ -17,6 +20,9 @@ def personlig_besøkshistorikk(epost):
 
         brukerID = bruker[0]
 
+# ====================================================================================
+# ============================== BRUKSTILFELLE 5 =====================================
+# ========================== Personlig besøkshistorikk ===============================
         cur.execute("""
                     SELECT DISTINCT
                         'Gruppetime' AS type,
@@ -49,19 +55,21 @@ def personlig_besøkshistorikk(epost):
 
                     ORDER BY dato_tid DESC;
         """, (brukerID, brukerID))
+# ====================================================================================
+        
         treninger = cur.fetchall()
 
-
-        print(f"\n            PERSONLIG BESØKSHISTORIKK FOR {epost}")
-        print(f"-----------------------------------------------------------------------")
+        print(f"\nPERSONLIG BESØKSHISTORIKK FOR {epost}")
         if not treninger:
             print(f"Ingen treninger funnet for {epost} siden 1. januar 2026.")
             return
         
-        # printer ut aktivitet_navn, treningssenter og dato/tid for treningen
-        for rad in treninger:
-            print(f"{rad[0]}: {rad[1]}, {rad[2]}, {rad[3]}")
-
+        print("--------------------------------------------------------------------------------")
+        print("Tid              | Aktivitet            | Senter                    | Type")
+        print("--------------------------------------------------------------------------------")
+        for type, aktivitet, senter, tid in treninger:
+            tid = tid[:16]
+            print(f"{tid:<16} | {aktivitet:<20} | {senter:<25} | {type}")
 
     except sqlite3.Error as e:
         print(f"\nFeil: Kunne ikke hente personlig besøkshistorikk [{e}]")
